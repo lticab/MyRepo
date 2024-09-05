@@ -5,8 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BP Creation Fn</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #113d6c;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header img {
+            width: 200px; /* Set logo width */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .header .company-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .main-content {
+            padding: 20px;
+            margin: 10px 10px 10px 10px;
+            max-width: auto;
+        }
         .form-container {
-            margin: 20px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			width:800px;
+        }
+        .form-container h2 {
+            margin-top: 0;
+        }
+        .form-container label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        .form-container input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .form-container button {
+            background-color: #113d6c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-container button:hover {
+            background-color: #0d2a47;
         }
         table {
             width: 100%;
@@ -14,11 +73,16 @@
             margin-top: 20px;
         }
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #ddd;
         }
         th, td {
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+        }
+        th {
+            background-color: #113d6c;
+            color: white;
+			
         }
         /* Spinner styles */
         .spinner {
@@ -45,46 +109,51 @@
     </style>
 </head>
 <body>
-    <div class="row sectionBlockLayout text-start" style="min-height: auto; padding: 8px;">
-        <div class="container" style="display: flex; flex-wrap: wrap;">
-            <div class="col-lg-12 columnBlockLayout" style="padding: 16px; margin: 60px 0px; min-height: 200px;">
-                <h1>Business Partner Search</h1>
+    <div class="header">
+        <img src="https://www.sea-lead.com/wp-content/uploads/2022/12/SeaLead-logo_white-1024x293.png?text=Logo" alt="Company Logo">
+        
+    </div>
+
+    <div class="main-content">
+        <h1>Business Partner Creation</h1>
+        
+        <div class="form-container">
+            <!--<h2>Search Form</h2>-->
+            <form id="bpForm">
+                <label for="bpName">Business Partner Name:</label>
+                <input type="text" id="bpName" name="bpName" required>
                 
-                <div class="form-container">
-                    <form id="bpForm">
-                        <label for="bpName">Business Partner Name:</label>
-                        <input type="text" id="bpName" name="bpName" required>
-                        <label for="city">City:</label>
-                        <input type="text" id="city" name="city" required>
-                        <button type="submit" id="submitBtn">Submit</button>
-                    </form>
-                </div>
-
-                <div id="loadingContainer" style="display: none;">
-                    <div class="spinner"></div>
-                    <div class="loading-message">Fetching data... This may take up to a minute.</div>
-                </div>
-
-                <h2>Results</h2>
-                <table id="resultsTable">
-                    <thead>
-                        <tr>
-                            <th>BP</th>
-                            <th>Business Partner Name</th>
-                            <th>City</th>
-                            <th>Email</th>
-                            <th>Telephone</th>
-                            <th>Street</th>
-                            <th>Postal Code</th>
-                            <th>ResultType</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Results will be injected here -->
-                    </tbody>
-                </table>
-            </div>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+                
+                <button type="submit" id="submitBtn">Submit</button>
+            </form>
         </div>
+
+        <div id="loadingContainer" style="display: none;">
+            <div class="spinner"></div>
+            <div class="loading-message">Fetching data... This may take up to a minute.</div>
+        </div>
+		<br>
+        <h2>Results</h2>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+					<th>Score</th>
+                    <th>BP</th>
+                    <th>Business Partner Name</th>
+                    <th>City</th>
+                    <th>Email</th>
+                    <th>Telephone</th>
+                    <th>Street</th>
+                    <th>Postal Code</th>
+                    <th>ResultType</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Results will be injected here -->
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -112,8 +181,9 @@
 
                 data.forEach(item => {
                     const row = tableBody.insertRow();
+					row.insertCell().textContent = item.Score;
                     const businessPartnerCell = row.insertCell();
-                    businessPartnerCell.textContent = item.BusinessPartner;
+					businessPartnerCell.textContent = item.BusinessPartner;
                     row.insertCell().textContent = item.BusinessPartnerName;
                     row.insertCell().textContent = item.city;
                     row.insertCell().textContent = item.EMailAddress;
